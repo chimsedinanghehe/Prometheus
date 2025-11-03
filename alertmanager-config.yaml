@@ -1,0 +1,27 @@
+global:
+  smtp_smarthost: 'smtp.example.com:587'
+  smtp_from: 'alert@example.com'
+  smtp_auth_username: 'user'
+  smtp_auth_password: 'password'
+
+receivers:
+  - name: 'email-alert'
+    email_configs:
+      - to: 'you@example.com'
+        send_resolved: true
+
+  - name: 'slack-alert'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/XXX/XXX/XXX'
+        channel: '#alerts'
+
+  - name: 'webhook-alert'
+    webhook_configs:
+      - url: 'http://my-webhook-service/alert'
+
+route:
+  receiver: 'email-alert'
+  routes:
+    - match:
+        severity: warning
+      receiver: 'slack-alert'
